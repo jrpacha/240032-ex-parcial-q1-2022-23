@@ -119,14 +119,21 @@ uStat(freeNodes) = um;
 %
 % Part A
 %
-% Let $n$ be the number of nodes and $\{u_{k}\}_{k=1\div n}$ the 
-% approximatons of the stationary solution at each node $x_{k}$, given by
-% the FEM, i.e., $u_{k}\approx u(x_{k})$ for each $k=1\div n$. Then, give 
-% the error, $\varepsilon, bewteen these approximations and the
-% exact values of the stationary solution at the same nodes, defined as
-% $$
-% \varepsilon = \max_{k=0\div n}\| u(x_{k}) - u_{k}| 
-% $$
+% Compute the stationary solution and, as we did in Practice P2.2,
+% give the error, $\varepsilon$, when comparing the numerical solution
+% with the exact solution
+% \[
+% \displaystyle\qquad
+% \tilde{u}(x) = -\frac{10}{\log 2} \log x + 1
+%\]
+% and we define $\varepsilon$ as
+% \[
+%\displaystyle\qquad
+% \varepsilon = \| \tilde{u}(x) - u_{\text{num}}\| = 
+% \max\limits_{k=1,\dots,n}|\tilde{u}(x_{k}) 
+%   - u_{\text{num}}(x_{k})\|,
+% \]
+%
 u = u_exact(nodes);
 epsilon = norm(u-uStat, inf);
 u_stat_hint = uStat(numNodHint);
@@ -139,15 +146,10 @@ fprintf(['\tProblema 3\n',...
 %
 % Part B
 %
-% Approximate the stationary solution at the point $x_{p} = \sqrt{3}$ by 
-% linear inteprolation form the values of the nodal solution at the nodes 
-% of the element to which the point belongs. Let us denote this approximate
-% value by $u_{\text{interp}}$. Then, give the absolute value of the 
-% difference between $u_{\text{interp}}$ and the exact value of the 
-% stationary solution at the same point, $u(\sqrt{3})$, i.e.,
-% $$
-% \tilde{\varepsilon} = \|u_{\text{interp}} - u(\sqrt{3})\|
-% $$
+% Approximate the stationary solution at the point $x_p = \sqrt{3}$ by 
+% linear interpolation from the nodal solution using the element's nodes 
+% to which the point belongs. The result is: 
+%
 u_interp = interp1(nodes,uStat,xp); 
 fprintf(['Part B\n',...
     'Interpolated value of the stationary solution at x = %9.4e\n',...
@@ -183,24 +185,24 @@ for i = 1:length(t) % (Should be 2:length(t))
     u_t = u_dt;
     %plot curve
         ff = plot(nodes(freeNodes), u_t,'-r');
-        tt = text(1.5, max(u_t), ['t =' num2str(t(i))]);
+        tt = text(1.5, max(u_t), ['$t = $' num2str(t(i))],...
+            'interpreter','LaTex','FontSize',15);
         drawnow;
+        pause(0.05)
         delete(tt);
         delete(ff);
-        %pause(0.005);
 end
 plot(nodes(freeNodes), u_t, '-r');
-text(1.5, max(u_t),  ['t =' num2str(t(i))]); 
+text(1.5, max(u_t),  ['$t = $' num2str(t(i))],...
+    'interpreter','LaTex','FontSize',15); 
 hold off
 
 u(freeNodes) = u_t; %Now u holds the nodal solution at t = tfin
 % 
 % Part C
 %
-% For the transient solution, taking $\sigma = 1$, give the nodal
-% averaged value of u at t=tfin, i.e.
-%
-% <u>_tfin = sum(u_k(tfin), k=1,...,n)
+% Finally, from the transient solution $u_{t}$ for this problem (according 
+% to the previous set values), give the mean of all the nodal values
 %
 u_av = sum(u)/numNod;
 u_hint = u(numNodHint);
