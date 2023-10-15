@@ -180,7 +180,8 @@ ylabel('u','Interpreter','LaTeX','FontSize',15)
 hold on
 plot(nodes, uStat, 'g') %Plot stationary solution
 %Solve the system at each time step
-for i = 1:length(t) % (Should be 2:length(t))
+%for i = 1:length(t) % (Should be 2:length(t))
+for i = 2:length(t)
     u_dt = Am\(Bm*u_t+Fm);
     u_t = u_dt;
     %plot curve
